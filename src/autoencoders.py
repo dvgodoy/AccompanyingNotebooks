@@ -9,9 +9,9 @@ def show(tensor, ax=None):
     img = np.rollaxis(tensor.detach().cpu().numpy(), 0, 3)
     kwargs = {'cmap': 'gray', 'vmin': 0, 'vmax': 1} if img.shape[-1] == 1 else {}
     if ax is None:
-        plt.imshow(img, **kwargs)
+        plt.imshow(img.squeeze(), **kwargs)
     else:
-        ax.imshow(img, **kwargs)
+        ax.imshow(img.squeeze(), **kwargs)
 
 def set_fontsize(ax, size):
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
@@ -231,13 +231,12 @@ def heatmap(data, row_labels, col_labels, ax=None,
 def figure1(dataset):
     real = dataset.tensors[0][:10].numpy()
     real = np.rollaxis(real, 1, 4)
-    img_real = np.concatenate([np.concatenate(r, axis=1) for r in np.split(real, 2, 0)], axis=0)
 
     fig, axs = plt.subplots(2, 5, figsize=(10, 4))
     axs = axs.flatten()
     for i in range(10):
         axs[i].set_title(f'Image #{i}')
-        axs[i].imshow(real[i], cmap='gray', vmin=0, vmax=1)
+        axs[i].imshow(real[i].squeeze(), cmap='gray', vmin=0, vmax=1)
     fig.tight_layout()
     return fig
 
